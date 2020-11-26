@@ -2,6 +2,8 @@
 <html>
 <head>
 	<title>Message page</title>
+	
+	<link rel="shortcut icon" href="logo.png">
 	<script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/7.6.2/firebase-firestore.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/live/3.1/firebase.js"></script>
@@ -33,6 +35,46 @@
 <center>
 	<div class="input_div_message_page">
 		<label>Send:</label>
+		<input type="file" id="upload"/>
+
+<script>
+
+  var uploader = document.getElementById('uploader');
+  var fileButton =         document.getElementById('upload');
+  fileButton.addEventListener('change', function(e){
+  var file = e.target.files[0];
+  var storageRef = firebase.storage().ref('img/'+file.name);
+  var task = storageRef.put(file);
+  task.on('state_changed', function progress(snapshot) {
+    var percentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+    uploader.value = percentage;
+
+  }, function error(err) {
+
+
+  },function complete() {
+
+  });
+});  
+  
+  
+</script>
+<script>
+
+document.getElementById('upload').onchange = uploadOnChange;
+    
+function uploadOnChange() {
+    var filename = this.value;
+    var lastIndex = filename.lastIndexOf("\\");
+    if (lastIndex >= 0) {
+        filename = filename.substring(lastIndex + 1);
+    }
+    document.getElementById('msg').value = "<iframe src='https://firebasestorage.googleapis.com/v0/b/talk-n-chat-89381.appspot.com/o/img%2F" + filename + "?alt=media&token=9ce47441-9c85-47a8-8da5-84afdc3c20c2'></iframe>";
+}
+</script>
+</script>
+</body>
+</html>
 		<input type="text" id="msg" class="form-control" placeholder="Message">
 		<button onclick="send()" class="btn btn-success">Send</button>
 	</div>
